@@ -23,4 +23,12 @@ Plain plan shape:
 
 ## Changing the app itself
 
-The app source is not stored here. Rebuilding `index.html` needs the owner's passcode, or a new passcode that the owner then enters once on the phone.
+The app source is not stored here in readable form. With the owner's passcode:
+
+    PASSCODE=... node tools/decrypt-app.mjs > /tmp/app-plain.html   # recover the source, outside the repo
+    # edit /tmp/app-plain.html
+    PASSCODE=... node tools/build-app.mjs /tmp/app-plain.html > index.new.html && mv index.new.html index.html
+
+`build-app.mjs` keeps the existing salt, so a phone that is already unlocked stays unlocked. Never commit the plain file.
+
+Ticks live in the phone's localStorage under `pd:day-YYYY-MM-DD`, keyed by the item ids in the schedule. Keep those ids stable.
